@@ -1,0 +1,15 @@
+{
+    "contents" : "#' @title Create an action or parameters table\n#' @rdname action_param\n#' @return A data frame\n#' @export\n#' @examples\n#' \\donttest{\n#' A1=.action(c(\"do.this\",\"do.that\"))\n#' A11=.action(\"do.this\")\n#' A2=.action(list(max,min))\n#' A21=.action(max)\n#' }\n.action=function(values){\n  do.call(composite.matrix,list(action=values))\n}\n\n#' @rdname action_param\n#' @export\n#' @examples\n#' \\donttest{\n#' param=.param(scale=list(scale_alpha_continuous(),scale_alpha_manual()),color=c(\"red\",\"blue\"))\n#' }\n.param=function(...){\n  do.call(composite.matrix,list(...))\n}\n\nis.basic.template=function(x){\n  is.data.frame(x)||is.matrix(x)\n}\n\n#' @rdname action_param\n#' @export\nis.action=function(x){\n  is.matrix(x)&&(colnames(x)==\"action\")\n}\n\n#' @rdname action_param\n#' @export\nis.param=function(x){\n  is.matrix(x)&&(!is.action(x))\n}",
+    "created" : 1382567667620.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "205063463",
+    "id" : "B9FF0829",
+    "lastKnownWriteTime" : 1382589755,
+    "path" : "~/R&D/R packages/Source packages/exe/R/what.R",
+    "properties" : {
+    },
+    "source_on_save" : false,
+    "type" : "r_source"
+}

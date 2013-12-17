@@ -1,0 +1,15 @@
+{
+    "contents" : "#####################\nextract.value=function(x){\n  apply(x,2,function(y)y[[1]][[2]])\n}\n\n#' @title Create naming layout\n#' @rdname naming\n#' @export\n#' @examples\n#' \\donttest{\n#' x=data.frame(.is(Site,\"Paris\"),.is(Year,2004),.in(Season,list(c(\"summer\",\"winter\"))),.is(Person,list(NULL)))\n#' naming.folder=create_naming(\"Site\",\"Season\")\n#' naming.folder(x)\n#' naming.underscore=create_naming(\"Site\",\"Season\",sep.global=\"_\")\n#' naming.underscore(x)\n#' }\ncreate_naming=function(...,sep.internal=\"-\"){\n  args=as.list(substitute(list(...)))[-1]\n  where.name=sapply(args,is.name)\n  names.select=sapply(args[where.name],as.character)\n  sep=c(NA,args[!where.name])\n  \n  function(template.list){\n    list.names.trow=lapply(template.list,colnames)\n    names.idx=as.numeric(match.in(names.select,list.names.trow))\n    ok.match=which(!is.na(names.idx))\n    names.idx=names.idx[ok.match]\n    match.names=names.select[ok.match]\n    match.sep=sep[ok.match]\n    \n    name.list=vector(2*length(names.idx),mode=\"list\")\n    for(k in seq(names.idx)){\n      name.list[2*k-1]=ifelse(k==1,\"\",match.sep[k])\n      template.list.k=template.list[[names.idx[k]]][,match.names[k],drop=FALSE]\n      if(is.condition(template.list.k)){\n        name.list.k=extract.value(template.list.k)\n      }else{\n        name.list.k=format(as.composite(template.list.k))[[1]]\n      }\n      name.list[2*k]=paste(name.list.k,collapse=sep.internal)\n    }\n    paste(name.list,collapse=\"\")\n  }\n}\n\n#' @export\napply_naming=function(naming,template){\n  k=1\n  res=character(length.template(template))\n  \n  f=function(template,current.name=NULL){\n    \n    if(is.null(template)){      # END CONDITION: NULL TEMPLATE -> APPLY ACTION TO DATA\n      res[[k]] <<- naming(current.name)\n      k<<-k+1\n      return()\n    }\n    \n    if(!is.basic.template(template)){ # IF COMPLEX TEMPLATE\n      if(template$op==\"rbind.fill\"){ # IF TEMPLATE IS MADE OF TWO STACKED TEMPLATES, APPLY ONE THEN THE OTHER.\n        f(template$x,current.name)\n        f(template$y,current.name)\n        return()\n      }\n      L=subdivide(template)\n      template=L$leftmost\n      branches=L$branches\n    }else{\n      branches=vector(nrow(template),mode=\"list\")\n    }\n    \n    for(k in seq(length.template(template))){\n      temp.k=extract.from.template(template,k)\n      current.name.k=c(current.name,list(temp.k))\n      f(branches[[k]],current.name.k)\n    }\n  }\n  f(template)\n  res\n}",
+    "created" : 1382329870092.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "2518338618",
+    "id" : "681B5E17",
+    "lastKnownWriteTime" : 1382590220,
+    "path" : "~/R&D/R packages/Source packages/exe/R/toolbox_naming.R",
+    "properties" : {
+    },
+    "source_on_save" : false,
+    "type" : "r_source"
+}

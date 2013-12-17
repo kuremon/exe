@@ -1,0 +1,16 @@
+{
+    "contents" : "#' @title Alias for exeres\n#' @name alias_exeres\n#' @description As the result of an exe called often include a naming function that computes name with non\n#' valid R object like / or - or names starting with a number it is impossible to access autocomplete.\n#' To bypass this restriction, exe assigns a class to its result \\code{c(\"exeres\",\"list\")}. Structurally\n#' an exeres object is absolutely equivalent to its underlying list. However when an element is looked for\n#' with handle \\code{$}, the aliases are displayed instead of the stored name. The stored names can still be \n#' retrieved with function \\code{\\link{real.names}}\n#' @keywords alias exeres\nNULL\n\n# This function takes as argument the a named list and returned the corresponding exeres list\n# with aliases (created with create_alias) ready to use\nadd_alias=function(exeres){\n  attr(exeres,\"alias\") <- create_alias(names(exeres))\n  class(exeres)=c(\"exeres\",\"list\")\n  exeres\n}\n\n# This function takes as input a character vector of names and returns their aliases. \ncreate_alias=function(x){\n  alias=as.list(x)\n  names(alias)=paste0(\"row\",gsub(\"[[:blank:]]\",\"\",gsub(\"-\",\"..\",gsub(\"\\\\/\",\".\",x))))\n  alias\n}\n\n#' @S3method names exeres\n#' @method names exeres\nnames.exeres=function(x){\n  names(attr(x,\"alias\"))\n}\n\n#' @S3method \"[\" exeres\n#' @method \"[\" exeres\n`[.exeres`<-function(x,i){\n  if(is.numeric(i)) return(NextMethod())\n  res=NULL\n  names.x=real.names(x)\n  for(str in i){\n     res=c(res,x[grep(paste0(\"^\",str),names.x)])\n   }\n  res\n}\n\n#' @S3method \"$\" exeres\n#' @method \"$\" exeres\n`$.exeres`<-function(x,name){\n  alias=attr(x,\"alias\")\n  x[[alias[[name]]]]\n}\n\n#' @title Get real names of an exeres\n#' @param x an exeres object\n#' @return A character vector of the stored names of \\code{x} (as opposed to the aliases).\n#' @export\nreal.names=function(x){\n  attr(x,\"names\")\n}",
+    "created" : 1382590341270.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "1976117167",
+    "id" : "BA2D4AEE",
+    "lastKnownWriteTime" : 1383003997,
+    "path" : "~/R&D/R packages/Source packages/exe/R/toolbox_alias.R",
+    "properties" : {
+        "tempName" : "Untitled1"
+    },
+    "source_on_save" : false,
+    "type" : "r_source"
+}

@@ -1,0 +1,15 @@
+{
+    "contents" : "#' @rdname when\n#' @export\nis.condition=function(x){\n  inherits(x,\"condition\")\n}\n\nwhen.call=function(expr,operator=\"==\",values){\n  res=as.matrix(lapply(values,function(x){\n    if(is.null(x)) return(NULL)\n    list(operator,x)}))\n  res=as.data.frame(res)\n  colnames(res)=deparse(expr)\n  class(res)=c(\"data.frame\",\"condition\")\n  res\n}\n\n#' @title when\n#' @rdname when\n#' @export\n#' @examples\n#' \\donttest{\n#' when(as.numeric(Year),\"%within%\",list(c(1998,2001),c(2002,2003)))\n#' }\nwhen=function(expr,operator=\"==\",values){\n  when.call(substitute(expr),operator,values)\n}\n\n#' @rdname when\n#' @export\n#' @examples\n#' \\donttest{\n#' .is(Site,c(\"site1\",\"site2\"))\n#' .is(Year,2001:2004)\n#' }\n.is=function(expr,values){when.call(expr=substitute(expr),operator=\"==\",values=values)}\n\n#' @rdname when\n#' @export\n.in=function(expr,values)when.call(expr=substitute(expr),operator=\"%in%\",values=values)\n\n#' @rdname when\n#' @export\n.within=function(expr,values)when.call(expr=substitute(expr),operator=\"%within%\",values=values)\n\n#' @rdname when\n#' @export\n#' @examples\n#' \\donttest{\n#' .is(Site,c(\"site1\",\"site2\"))\n#' .is(Year,2001:2004)\n#' }\npair.of <- function(expr,values,operator=\"%in%\"){\n  res=combn(values,2,simplify=FALSE)\n  when.call(expr=substitute(expr),operator=operator,values=res)\n}\n\n#' @rdname when\n#' @export\nsymmetric.pair.of <- function(expr,values,operator=\"%in%\"){\n  res=unlist(combn(values,2,function(x)list(x,rev(x)),simplify=FALSE),recursive=FALSE)\n  when.call(expr=substitute(expr),operator=operator,values=res)\n}",
+    "created" : 1382329828928.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "2829775358",
+    "id" : "7F2DC7E8",
+    "lastKnownWriteTime" : 1382504099,
+    "path" : "~/R&D/R packages/Source packages/exe/R/when.R",
+    "properties" : {
+    },
+    "source_on_save" : false,
+    "type" : "r_source"
+}

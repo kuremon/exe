@@ -1,0 +1,22 @@
+Package: exe
+Type: Package
+Title: Repetitive action (testing, plotting, etc...) simplified
+Version: 2.0
+Date: 2013-07-23
+Author: Clement Bonini
+Maintainer: Clement Bonini <clement.bonini@gmail.com>
+Description: Tools to perform bundles of actions easily.
+Imports:
+    plyr,
+    lazyr
+License: GPL
+Collate:
+    'when.R'
+    'exe.R'
+    'toolbox_subset2.R'
+    'toolbox_exe.R'
+    'toolbox_naming.R'
+    'toolbox_test_wrapper.R'
+    'toolbox_template.R'
+    'what.R'
+    'toolbox_alias.R'

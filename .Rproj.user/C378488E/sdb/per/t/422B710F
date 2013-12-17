@@ -1,0 +1,15 @@
+{
+    "contents" : "#' @title exe\n#' @name exe_package\n#' @docType package\n#' @import plyr lazyr composite\nNULL",
+    "created" : 1382592887104.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "2640518581",
+    "id" : "422B710F",
+    "lastKnownWriteTime" : 1382564947,
+    "path" : "~/R&D/R packages/Source packages/exe/R/exe.R",
+    "properties" : {
+    },
+    "source_on_save" : false,
+    "type" : "r_source"
+}

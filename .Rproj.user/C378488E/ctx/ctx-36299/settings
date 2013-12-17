@@ -1,0 +1,5 @@
+r.session.client_metrics.console-width="130"
+r.session.client_metrics.graphics-height="564"
+r.session.client_metrics.graphics-width="681"
+r_profile_on_restore="1"
+working_directory="~/R&D/R packages/Source packages/exe"

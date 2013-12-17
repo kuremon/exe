@@ -1,0 +1,16 @@
+{
+    "contents" : "#' @export\nsubdivide=function(template){\n  f=function(temp){\n    \n    if(is.basic.template(temp)){\n      n=nrow(temp)\n      return(list(leftmost=temp,branches=vector(n,mode=\"list\"),tags=as.list(seq(n))))\n    }\n    \n    op=temp$op\n    x=temp$x\n    y=temp$y\n    \n    res.x=f(x)\n    \n    leftmost.x=res.x$leftmost\n    branches.x=res.x$branches\n    tags.x=res.x$tags\n    \n    if(op==\"rbind.fill\"){\n     res.y=f(y)\n     leftmost.y=res.y$leftmost\n     branches.y=res.y$branches\n     tags.y=res.y$tags\n     return(list(leftmost=leftmost.x%rb%leftmost.y,branches=c(branches.x,branches.y),tags=c(tags.x,tags.y)))\n    }\n    \n    if(op==\"cbind\"){\n      for(k in seq(branches.x)){\n        branches.x[[k]]=branches.x[[k]]%cb%extract.from.template(y,range(tags.x[[k]]))\n      }\n    }\n    \n    if(op==\"expand.mgrid\"){\n      l.y=length.template(y)\n      for(k in seq(branches.x)){\n        branches.x[[k]]=branches.x[[k]]%ex%y\n        tags.x[[k]]=(tags.x[[k]]-1)*l.y\n      }\n    }\n    \n    list(leftmost=leftmost.x,branches=branches.x,tags=tags.x)\n  }\n  f(template)[c(\"leftmost\",\"branches\")]\n}\n\n\n#' @export\nexe=function(template,data,naming){\n  #k=1\n  res=setNames(vector(length.template(template),mode=\"list\"),apply_naming(naming,template))\n  res=add_alias(res)\n  \n  f=function(template,data,current.name=NULL,action=NULL,param=NULL){\n    \n    if(is.null(template)){      # END CONDITION: NULL TEMPLATE -> APPLY ACTION TO DATA\n      res[[naming(current.name)]] <<- do.call(action,c(list(data),param))\n      #k<<-k+1\n      return()\n    }\n    \n    if(!is.basic.template(template)){ # IF COMPLEX TEMPLATE\n      if(template$op==\"rbind.fill\"){ # IF TEMPLATE IS MADE OF TWO STACKED TEMPLATES, APPLY ONE THEN THE OTHER.\n        f(template$x,data,current.name,action,param)\n        f(template$y,data,current.name,action,param)\n        return()\n      }\n      L=subdivide(template)\n      template=L$leftmost\n      branches=L$branches\n    }else{\n      branches=vector(nrow(template),mode=\"list\")\n    }\n    \n    for(k in seq(length.template(template))){\n      temp.k=extract.from.template(template,k)\n      current.name.k=c(current.name,list(temp.k))\n      if(is.condition(temp.k)){\n        f(branches[[k]],subset2(data,temp.k),current.name.k,action,param)\n      }else{\n        temp.k.drop=as.list(drop(temp.k))\n        if(is.action(temp.k)) f(branches[[k]],data,current.name.k,temp.k.drop$action,param)\n        if(is.param(temp.k)) f(branches[[k]],data,current.name.k,action,c(param,temp.k.drop)) \n      }\n    }\n  }\n  f(template,data)\n  res\n}",
+    "created" : 1382481790009.000,
+    "dirty" : true,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "3248267819",
+    "id" : "380BBFA4",
+    "lastKnownWriteTime" : 1382569323,
+    "path" : "~/R&D/R packages/Source packages/exe/R/toolbox_exe.R",
+    "properties" : {
+        "tempName" : "Untitled1"
+    },
+    "source_on_save" : false,
+    "type" : "r_source"
+}

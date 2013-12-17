@@ -1,0 +1,16 @@
+{
+    "contents" : "#example\ntemplate=.is(Metal,c(\"Cu\",\"Al\"))%ex%(.is(Site,c(\"BEL\",\"FAV\"))%cb%.is(Year,c(2003,2004)))\nfull.format(template)\nL=subdivide(template)\nL$leftmost\nlapply(L$branches,function(bra)full.format(bra))\n\n\ntemplate2=(.in(test,1:2)%cb%.is(Metal,c(\"Cu\",\"Al\")))%ex%(.is(Site,c(\"BEL\",\"FAV\"))%cb%.is(Year,c(2003,2004)))\n\n\ntemplate=.is(am,c(0,1))%ex%(.is(cyl,c(6,8))%rb%(.is(cyl,4)%cb%.is(gear,4)))\n\n\nnaming=create_naming(am,\"/\",cyl,\"_\",gear)\nnaming(list(.in(cyl,\"essai\"),.is(am,45)))\n\nnaming.action=create_naming(am,\"/\",cyl,\"_\",action)\nnaming.action(list(.in(cyl,\"essai\"),.is(am,45),.action(\"doThat\")))\nnaming.action(list(.in(cyl,\"essai\"),.is(am,45),.action(max)))\n\n\n\nnaming.param=create_naming(am,\"/\",cyl,\"_\",scale)\n\nnaming.param(list(.param(scale=list(scale_y_reverse())),.in(cyl,\"essai\"),.is(am,45)))\n\n\nmyplot=function(df){\n  ggplot(data=df)+geom_point(aes(x=wt,y=mpg))\n}\n\ncheck=function(df){\n  list(am=unique(df$am),cyl=unique(df$cyl),gear=unique(df$gear))\n}\n\ntemplate=.is(am,c(0,1))%ex%(.is(cyl,c(6,8))%rb%(.is(cyl,4)%cb%.is(gear,4)))\nnaming.action=create_naming(am,\"/cyl\",cyl,\"_gear\",gear,\"-\",action)\nres=exe(template%ex%(.action(c(\"myplot\",\"check\"))),mtcars,naming.action)\n\n\n\nnaming2=create_naming(am,\"/\",cyl,\"_\",gear,\"-\",action)\ntemplate2=template%ex%(.action(c(\"myplot\",\"check\")))\ntemplate3=template%ex%(.action(list(myplot,check)))\n\nres=exe(template2,mtcars,naming2)\n\n\n",
+    "created" : 1382329908965.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "870076096",
+    "id" : "9504AB2E",
+    "lastKnownWriteTime" : 1382590790,
+    "path" : "~/R&D/R packages/Code to package/exe_examples.R",
+    "properties" : {
+        "tempName" : "Untitled1"
+    },
+    "source_on_save" : false,
+    "type" : "r_source"
+}
